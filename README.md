@@ -1,6 +1,7 @@
 # guessrgb-java
 
-It's the same thing of the other game, but made in Java.
+It's the same thing of the web game, but made in Java.
+Play the web version here: https://rgb-bsg.netlify.app
 
 
 # To-do list:
