@@ -16,16 +16,16 @@ public class Square extends JButton {
 		this.red = color.getRed();
 		this.green = color.getGreen();
 		this.blue = color.getGreen();
-		Integer size = 150;
+		Integer size = 120;
 		this.setPreferredSize(new Dimension(size, size));
 	}
 
 	public String rgbToString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append(red);
-		sb.append(", ");
+		sb.append(",");
 		sb.append(green);
-		sb.append(", ");
+		sb.append(",");
 		sb.append(blue);
 		return sb.toString();
 	}

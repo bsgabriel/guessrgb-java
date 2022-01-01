@@ -1,9 +1,8 @@
 package com.game.view;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
+import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -11,13 +10,13 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
 
-import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSplitPane;
 
 import com.game.entity.Square;
+import com.game.util.Util;
 
 public abstract class AbstractBoard extends JFrame {
 
@@ -25,69 +24,106 @@ public abstract class AbstractBoard extends JFrame {
 	protected Integer qtdButtons = 6;
 
 	protected JLabel lblRgb;
+
+	protected JButton btnPlayAgain;
+
 	protected JPanel titlePanel;
+	protected JPanel menuPanel;
 	protected JPanel btnPanel;
+	protected JPanel btnWrapper;
+
+	protected Square randomSquare; // the square you need to guess
+
+	protected boolean isPlaying;
+
+	protected static final String BTN_PLAY_AGAIN_DEFAULT_TEXT = "New Colors";
+	protected static final String BTN_PLAY_AGAIN_END_TEXT = "Play again?";
 
 	protected abstract void checkSquare(Square sq);
 
+	protected abstract void getRandomSquare();
+
 	protected AbstractBoard() {
 
-		this.setTitle("RGB Guessing - Java version");
+		this.setTitle("RGB Guessing Game - Java version");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(800, 600);
 		this.setLocationRelativeTo(null);
-		this.setLayout(new BorderLayout());
-		this.setBackground(new Color(55, 55, 55));
+		this.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+		this.setBackground(new Color(35, 35, 35));
 		this.setResizable(false);
+
+		titlePanel = createTitlePanel();
+		menuPanel = createMenuPanel();
+		btnPanel = createBtnPanel();
+
+		this.getContentPane().add(titlePanel);
+		this.getContentPane().add(menuPanel);
+		this.getContentPane().add(btnPanel);
 
 		loadButtons();
 		addEvents();
 
-		titlePanel = createTitlePanel();
-		btnPanel = createBtnPanel();
-		this.getContentPane().add(titlePanel, BorderLayout.NORTH);
-		this.getContentPane().add(btnPanel);
+		isPlaying = true;
 	}
 
 	private JPanel createTitlePanel() {
 		JPanel pnl = new JPanel();
-		pnl.setLayout(new BorderLayout());
+		pnl.setLayout(new GridLayout(3, 1));
 		pnl.setPreferredSize(new Dimension(800, 100));
-		pnl.setBackground(new Color(47, 47, 47));
+		pnl.setBackground(new Color(70, 130, 180));
 
-		lblRgb = new JLabel("255, 255, 255");
-		lblRgb.setForeground(Color.LIGHT_GRAY);
-		lblRgb.setFont(new Font("Arial", Font.BOLD, 30));
-		lblRgb.setHorizontalAlignment(JLabel.CENTER);
+		lblRgb = Util.createDefaultLabel("", 25);
 
+		pnl.add(Util.createDefaultLabel("THE GREAT", 15));
 		pnl.add(lblRgb);
+		pnl.add(Util.createDefaultLabel("COLOR GAME", 15));
+		return pnl;
+	}
+
+	private JPanel createMenuPanel() {
+		JPanel pnl = new JPanel();
+		pnl.setLayout(new GridBagLayout());
+		pnl.setPreferredSize(new Dimension(800, 25));
+		pnl.setBackground(Color.WHITE);
+
+		btnPlayAgain = new JButton(BTN_PLAY_AGAIN_DEFAULT_TEXT);
+		btnPlayAgain.setPreferredSize(new Dimension(100, 25));
+		btnPlayAgain.setForeground(new Color(70, 130, 180));
+
+		pnl.add(btnPlayAgain);
 		return pnl;
 	}
 
 	private JPanel createBtnPanel() {
-		Color background = new Color(55, 55, 55);
+		Color background = new Color(35, 35, 35);
 		JPanel pnl = new JPanel();
+		pnl.setPreferredSize(new Dimension(800, 475));
 		pnl.setLayout(new GridBagLayout());
 		pnl.setBackground(background);
 
-		JPanel btnWrapper = new JPanel();
+		btnWrapper = new JPanel();
 		btnWrapper.setLayout(new GridLayout(2, 3, 10, 10));
 		btnWrapper.setBackground(background);
-
-		for (Square sq : lstSquares) {
-			btnWrapper.add(sq);
-		}
 
 		pnl.add(btnWrapper);
 		return pnl;
 	}
 
 	private void loadButtons() {
-		lstSquares = new ArrayList<>();
+		if (lstSquares == null) {
+			lstSquares = new ArrayList<>();
+		}
+		lstSquares.clear();
+
 		for (int i = 0; i < qtdButtons; i++) {
 			Square sq = new Square(generateRandonColor());
 			lstSquares.add(sq);
+			btnWrapper.add(sq);
 		}
+		getRandomSquare();
+		addSquareActionListener();
+		System.out.println("--------------------");
 	}
 
 	private Color generateRandonColor() {
@@ -100,6 +136,23 @@ public abstract class AbstractBoard extends JFrame {
 	}
 
 	private void addEvents() {
+		btnPlayAgain.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				btnWrapper.removeAll();
+				loadButtons();
+				btnWrapper.updateUI();
+
+				// if the game have ended, it will change the button's text to the default value
+				if (!isPlaying) {
+					btnPlayAgain.setText(BTN_PLAY_AGAIN_DEFAULT_TEXT);
+				}
+			}
+		});
+	}
+
+	private void addSquareActionListener() {
 		for (Square sq : lstSquares) {
 			sq.addActionListener(new ActionListener() {
 				@Override
@@ -109,5 +162,4 @@ public abstract class AbstractBoard extends JFrame {
 			});
 		}
 	}
-
 }
