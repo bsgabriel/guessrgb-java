@@ -38,6 +38,7 @@ public abstract class AbstractBoard extends JFrame {
 
 	protected static final String BTN_PLAY_AGAIN_DEFAULT_TEXT = "New Colors";
 	protected static final String BTN_PLAY_AGAIN_END_TEXT = "Play again?";
+	protected static final Color TITLE_PNL_DEFAULT_COLOR = new Color(70, 130, 180);
 
 	protected abstract void checkSquare(Square sq);
 
@@ -71,7 +72,7 @@ public abstract class AbstractBoard extends JFrame {
 		JPanel pnl = new JPanel();
 		pnl.setLayout(new GridLayout(3, 1));
 		pnl.setPreferredSize(new Dimension(800, 100));
-		pnl.setBackground(new Color(70, 130, 180));
+		pnl.setBackground(TITLE_PNL_DEFAULT_COLOR);
 
 		lblRgb = Util.createDefaultLabel("", 25);
 
@@ -147,6 +148,7 @@ public abstract class AbstractBoard extends JFrame {
 				// if the game have ended, it will change the button's text to the default value
 				if (!isPlaying) {
 					btnPlayAgain.setText(BTN_PLAY_AGAIN_DEFAULT_TEXT);
+					titlePanel.setBackground(TITLE_PNL_DEFAULT_COLOR);
 				}
 			}
 		});
