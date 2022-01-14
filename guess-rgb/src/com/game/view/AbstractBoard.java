@@ -24,6 +24,7 @@ public abstract class AbstractBoard extends JFrame {
 	protected Integer qtdButtons = 6;
 
 	protected JLabel lblRgb;
+	protected JLabel lblScore;
 
 	protected JButton btnPlayAgain;
 
@@ -91,8 +92,11 @@ public abstract class AbstractBoard extends JFrame {
 		btnPlayAgain = new JButton(BTN_PLAY_AGAIN_DEFAULT_TEXT);
 		btnPlayAgain.setPreferredSize(new Dimension(100, 25));
 		btnPlayAgain.setForeground(new Color(70, 130, 180));
+		
+		lblScore = Util.createDefaultLabel("score: 0", 15, new Color(70, 130, 180));
 
 		pnl.add(btnPlayAgain);
+		pnl.add(lblScore);
 		return pnl;
 	}
 

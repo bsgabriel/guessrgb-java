@@ -8,8 +8,10 @@ import com.game.entity.Square;
 
 public class Board extends AbstractBoard {
 
+	private Integer score;
+	
 	public Board() {
-
+		this.score = 0;
 	}
 
 	/**
@@ -23,6 +25,8 @@ public class Board extends AbstractBoard {
 			btnPlayAgain.setText(BTN_PLAY_AGAIN_END_TEXT);
 			JOptionPane.showMessageDialog(this, "You win!");
 			isPlaying = false;
+			score++;
+			lblScore.setText("score: " + score);
 		} else {
 			sq.setVisible(false);
 		}
