@@ -1,6 +1,7 @@
 package com.game.view;
 
 import java.awt.Color;
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
@@ -14,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JToggleButton;
 
 import com.game.entity.Square;
 import com.game.util.Util;
@@ -27,6 +29,9 @@ public abstract class AbstractBoard extends JFrame {
 	protected JLabel lblScore;
 
 	protected JButton btnPlayAgain;
+
+	protected JToggleButton tgEasy;
+	protected JToggleButton tgHard;
 
 	protected JPanel titlePanel;
 	protected JPanel menuPanel;
@@ -63,8 +68,8 @@ public abstract class AbstractBoard extends JFrame {
 		this.getContentPane().add(menuPanel);
 		this.getContentPane().add(btnPanel);
 
-		loadButtons();
 		addEvents();
+		tgHard.doClick();
 
 		isPlaying = true;
 	}
@@ -91,11 +96,21 @@ public abstract class AbstractBoard extends JFrame {
 
 		btnPlayAgain = new JButton(BTN_PLAY_AGAIN_DEFAULT_TEXT);
 		btnPlayAgain.setPreferredSize(new Dimension(100, 25));
-		btnPlayAgain.setForeground(new Color(70, 130, 180));
-		
-		lblScore = Util.createDefaultLabel("score: 0", 15, new Color(70, 130, 180));
+		btnPlayAgain.setForeground(TITLE_PNL_DEFAULT_COLOR);
+
+		lblScore = Util.createDefaultLabel("score: 0", 15, TITLE_PNL_DEFAULT_COLOR);
+
+		tgEasy = new JToggleButton("easy");
+		tgEasy.setPreferredSize(new Dimension(75, 25));
+		tgEasy.setForeground(TITLE_PNL_DEFAULT_COLOR);
+
+		tgHard = new JToggleButton("hard");
+		tgHard.setPreferredSize(new Dimension(75, 25));
+		tgHard.setForeground(TITLE_PNL_DEFAULT_COLOR);
 
 		pnl.add(btnPlayAgain);
+		pnl.add(tgEasy);
+		pnl.add(tgHard);
 		pnl.add(lblScore);
 		return pnl;
 	}
@@ -142,7 +157,6 @@ public abstract class AbstractBoard extends JFrame {
 
 	private void addEvents() {
 		btnPlayAgain.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				btnWrapper.removeAll();
@@ -150,6 +164,45 @@ public abstract class AbstractBoard extends JFrame {
 				btnWrapper.updateUI();
 
 				// if the game have ended, it will change the button's text to the default value
+				if (!isPlaying) {
+					btnPlayAgain.setText(BTN_PLAY_AGAIN_DEFAULT_TEXT);
+					titlePanel.setBackground(TITLE_PNL_DEFAULT_COLOR);
+				}
+			}
+		});
+
+		tgEasy.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				tgHard.setSelected(false);
+				qtdButtons = 3;
+
+				btnWrapper.removeAll();
+				// update the layout to keep only one line (it gets weird if remove this)
+				btnWrapper.setLayout(new GridLayout(1, 3, 10, 10));
+				loadButtons();
+				btnWrapper.updateUI();
+
+				if (!isPlaying) {
+					btnPlayAgain.setText(BTN_PLAY_AGAIN_DEFAULT_TEXT);
+					titlePanel.setBackground(TITLE_PNL_DEFAULT_COLOR);
+				}
+
+			}
+		});
+
+		tgHard.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				tgEasy.setSelected(false);
+				qtdButtons = 6;
+
+				btnWrapper.removeAll();
+				// update the layout to keep two lines (it gets weird if remove this)
+				btnWrapper.setLayout(new GridLayout(2, 3, 10, 10));
+				loadButtons();
+				btnWrapper.updateUI();
+
 				if (!isPlaying) {
 					btnPlayAgain.setText(BTN_PLAY_AGAIN_DEFAULT_TEXT);
 					titlePanel.setBackground(TITLE_PNL_DEFAULT_COLOR);
