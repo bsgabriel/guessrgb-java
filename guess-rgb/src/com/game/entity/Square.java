@@ -15,7 +15,7 @@ public class Square extends JButton {
 		this.setBackground(color);
 		this.red = color.getRed();
 		this.green = color.getGreen();
-		this.blue = color.getGreen();
+		this.blue = color.getBlue();
 		Integer size = 120;
 		this.setPreferredSize(new Dimension(size, size));
 	}
